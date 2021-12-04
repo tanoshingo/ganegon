@@ -4,3 +4,4 @@ rubyのアレ用リポジトリです
 naklasima mitayo
 ずっと見てるよ
 内藤確認
+あははは
