@@ -1,2 +1,0 @@
-ブランチRbのreadmeファイルです
-yattane
