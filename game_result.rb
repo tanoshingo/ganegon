@@ -15,10 +15,13 @@ end
 #引数　banmen: 薬やウイルスの盤面
 #戻値　0: ゲームオーバーしていない, 1: ゲームオーバー
 def GameOver(banmn)
-  banmen.each do |x|
-    if(banmen != 0) #盤面上部が空きでないならゲームオーバー
+  banmen.each_with_index do |x, id|
+	  if(id.modulo(banmen.size) == 0 && banmen != 0) #盤面上部が空きでないならゲームオーバー
       return 1
     end
   end
   return 0 #ここまで来たらゲームオーバーしてない
 end
+
+banmen = [ [0, 1] , [1, 0], [0, 0]]
+print GameClear(banmen);
