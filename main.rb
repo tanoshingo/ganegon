@@ -4,6 +4,7 @@ include DXOpal
 
 require_remote 'main_menu_method.rb'
 
+
 Image.register(:back, "image/back.png")  #背景の画像
 Image.register(:medic, "image/YAKU_cupcell.png")    #薬の画像
 Image.register(:enemy, "image/uirusu.png")  #ウイルスの画像
@@ -90,15 +91,27 @@ end
 Window.load_resources do    #画像変数などの定義はここでする
 
     #background = Image[:back]  #背景描画
+    
     field = Field.new   #mapを作成する
     mainmenu = MainMenu.new  #mainmenuを作成
+    
+    type = 0  #処理タイプ 0:mainmenu 1:game 2:setting
     
     #ここにゲーム全体のループ処理を記述
     Window.loop do
         
-        #mainmenu.draw()
         #Window.draw(0, 0, background, -10)  #背景描画
-        field.draw()
+        
+        if (type == 0) then
+            type = mainmenu.draw()
+        
+        elsif (type == 1) then
+            field.draw()
+        
+        elsif (type == 2) then
+            type = 0
+            
+        end
         
     end
 end
