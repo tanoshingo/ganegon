@@ -1,9 +1,9 @@
 # coding: utf-8
-require 'dxopal'
+require 'dxopal';
 include DXOpal
 
 Image.register(:medic, "image/YAKU_cupcell.png")    #薬の画像
-Image.register(:bottle, "image/bing.bmp")   #薬瓶の画像
+#Image.register(:bottle, "image/bing.png")   #薬瓶の画像
 Image.register(:enemy, "image/uirusu.png")  #ウイルスの画像
 
 #ウィンドウの初期設定
@@ -25,6 +25,7 @@ Window.load_resources do    #画像変数などの定義はここでする
     #ここにゲーム全体のループ処理を記述
     Window.loop do
         
+        Window.draw(100, 100, medics[0])
         
     end
 end
