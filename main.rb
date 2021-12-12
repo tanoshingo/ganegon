@@ -3,7 +3,13 @@ require 'dxopal';
 include DXOpal
 
 Image.register(:medic, "image/REAL_YAKU.png")    #薬の画像
+require_remote 'main_menu_method.rb'
+
+Image.register(:back, "image/back.png")  #背景の画像
+Image.register(:medic, "image/YAKU_cupcell.png")    #薬の画像
 Image.register(:enemy, "image/uirusu.png")  #ウイルスの画像
+Image.register(:heart, "image/heart.png")  #ハートの画像
+
 
 #ウィンドウの初期設定
 Window.width = 1200
@@ -169,6 +175,10 @@ Window.load_resources do    #画像変数などの定義はここでする
     p_medic = Array.new(2)
     p_medic[0] = Player.new(queue[0])    #プレイヤー用の薬を作成
     p_medic[1] = Player.new(queue[1])    #プレイヤー用の薬を作成
+
+    #background = Image[:back]  #背景描画
+    field = Field.new   #mapを作成する
+    mainmenu = MainMenu.new  #mainmenuを作成
     
     #ここにゲーム全体のループ処理を記述
     Window.loop do
@@ -177,6 +187,9 @@ Window.load_resources do    #画像変数などの定義はここでする
         queue[1] = Medic.new
         queue[0].dir = 2    #右向き
         queue[1].dir = 4    #左向き
+
+        #mainmenu.draw()
+        #Window.draw(0, 0, background, -10)  #背景描画
         field.draw()
         queue[0].draw()
         queue[1].draw()
