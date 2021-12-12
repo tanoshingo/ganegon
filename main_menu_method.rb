@@ -30,6 +30,7 @@ def draw()
         Window.draw(180, 330, @hearts)
         if (Input.key_push?(K_SPACE)) then
             #type変更→処理移行→各種変数初期化(PLAY)
+            choices = 0
             return 1
         end
             
@@ -37,6 +38,7 @@ def draw()
         Window.draw(180, 430, @hearts)
         if (Input.key_push?(K_SPACE)) then
             #type変更→処理移行→各種変数初期化(SETTING)
+            choices = 0
             return 2
         end
     end
