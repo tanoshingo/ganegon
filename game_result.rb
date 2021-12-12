@@ -20,7 +20,7 @@ end
 def GameOverFlag(banmen)
   banmen[1].each do |youso| #盤面上部を要素ごとに分解
     #判定
-	if(youso != 0) #空きでないならゲームオーバー
+	if(youso != Field.EMPTY) #空きでないならゲームオーバー
       return 1
     end
   end
