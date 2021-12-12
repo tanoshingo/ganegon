@@ -26,12 +26,13 @@ class Field
         @WALL = 1000000
         
         #フィールド全体の変数を宣言
-        @map = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
+        @map = Array.new(@FIELD_Y) { Array.new(@FIELD_X, @EMPTY) }
         
         #画像データを格納する変数
         @medics = Image[:medic].slice_tiles(6, 1)    #薬の画像を分割（配列化、medics[0]～medics[5]）
         @virus = Image[:enemy].slice_tiles(2, 2) #ウイルスの画像を分割（配列化、virus[0]～virus[2]）
-        @bottle_chip = Image.new(30, 30, [125, 125, 125]) #薬瓶のbit画像を生成
+        @bottle_chip = Image.new(34, 34, [125, 125, 125]) #薬瓶のbit画像を生成
+        @empty_chip = Image.new(34, 34, [0, 0, 0]) #薬瓶のbit画像を生成
 
         #壁を生成
         (@FIELD_Y).times do |y|
@@ -61,9 +62,9 @@ class Field
     #戻り値：なし
     def draw()
         
-        @default_x = 450    #X方向の開始座標
-        @default_y = 150    #Y方向の開始座標
-        @mapchip_size = 30  #1マスあたりのサイズ
+        @default_x = 430    #X方向の開始座標
+        @default_y = 90    #Y方向の開始座標
+        @mapchip_size = 34  #1マスあたりのサイズ
         
         y = 0
         while y < @FIELD_Y do
@@ -73,6 +74,8 @@ class Field
                 
                 if (@map[y][x] == @WALL) then   #壁を描画
                     Window.draw(x * @mapchip_size + @default_x, y * @mapchip_size + @default_y, @bottle_chip)
+                else    #何もない場所を描画
+                    Window.draw(x * @mapchip_size + @default_x, y * @mapchip_size + @default_y, @empty_chip)
                 end
                 x += 1
             end
