@@ -15,7 +15,7 @@ Window.bgcolor = C_WHITE
 #概　要：field用のクラス
 class Field
     
-    #attr_accessor :map :medics :virus :bottle_chip
+    attr_accessor :map, :medics, :virus, :bottle_chip, :FIELD_X, :FIELD_Y
 
     def initialize()
         
