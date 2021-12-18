@@ -99,9 +99,9 @@ def AddDeleteFlag(banmen_t, renzoku, idx, idy, gyouretsu_flag)
     if(renzoku >= 4)  #4つ以上連続していたら
       renzoku.times do |id|
         if(gyouretsu_flag)  #行に代入
-          banmen_t[idy+1][idx-id] = 1
+          banmen_t[idy+1][idx+1-id] = 1
         else  #列に代入
-          banmen_t[idy-id][idx+1] = 1
+          banmen_t[idy+1-id][idx+1] = 1
         end
       end
     end
@@ -120,7 +120,7 @@ def DeleteFlag(banmen)
   18.times do |idy|  #行に分解
     renzoku = 0  #連続回数の初期化
     8.times do |idx|
-      if(banmen[idy+1][idx+1] != banmen[idy+1][idx])  #今調べている要素 ≠ 1つ前に調べていた要素
+      if(banmen[idy+1][idx+1] == 0 || banmen[idy+1][idx+1] != banmen[idy+1][idx])  #今調べている要素 ≠ 1つ前に調べていた要素
         AddDeleteFlag(banmen_t, renzoku, idx, idy, gyouretsu_flag)
         renzoku = 1  #連続回数の初期化して1増やす(要するに1にする)
       else  #今調べている要素 = 1つ前に調べていた要素
@@ -135,7 +135,7 @@ def DeleteFlag(banmen)
   8.times do |idx|  #列に分解
     renzoku = 0  #連続回数の初期化
     18.times do |idy|
-      if(banmen[idy+1][idx+1] != banmen[idy][idx+1])  #今調べている要素 ≠ 1つ前に調べていた要素
+      if(banmen[idy+1][idx+1] == 0 || banmen[idy+1][idx+1] != banmen[idy][idx+1])  #今調べている要素 ≠ 1つ前に調べていた要素
         AddDeleteFlag(banmen_t, renzoku, idx, idy, gyouretsu_flag)
         renzoku = 1  #連続回数の初期化して1増やす(要するに1にする)
       else  #今調べている要素 = 1つ前に調べていた要素
@@ -147,6 +147,22 @@ def DeleteFlag(banmen)
   return banmen_t
 end
 #消す判定ここまで----------------------------------------------
+
+def Delete(banmen)
+  flag = false
+  banmen_t = DeleteFlag(banmen)
+  p "banmen", banmen_t
+  18.times do |y|
+    8.times do |x|
+      if(banmen_t [y+1][x+1] == 1)
+        banmen[y+1][x+1] = 0
+        flag = true
+      end
+    end
+  end
+  p "flag", flag
+  return flag
+end
 
 def DropFlagLoop(banmen, banmen_t, banmen_d, x, y, flag)
   a = Array.new(3, 0)
@@ -193,14 +209,44 @@ def DropFlag(banmen)
       DropFlagLoop(banmen, banmen_t, banmen_d, idx+1, idy+1, 0)
     end
   end
-  banmen_t.each do |gyou|
-    p gyou
+  return banmen_d
+end
+
+def DropOne(banmen)
+  banmen_t = DropFlag(banmen)
+  flag = false
+  18.times do |y|
+    8.times do |x|
+      if(banmen_t [18-y][8-x] == 1)
+        banmen[19-y][8-x] = banmen [18-y][8-x]
+        banmen[18-y][8-x] = 0
+        flag = true
+      end
+    end
   end
-  banmen_d.each do |gyou|
-    p gyou
+  return flag
+end
+
+def Drop(banmen)
+  while(DropOne(banmen))
   end
 end
 
+
+def DeleteAndDrop(banmen)
+  while(Delete(banmen))
+    print "\n\nDelete\n"
+    banmen.each do |gyou|
+      p gyou
+    end
+    print "\n\nDrop\n"
+    Drop(banmen)
+    banmen.each do |gyou|
+      p gyou
+    end
+    print "\n\n"
+  end
+end
 
 #以下, デバッグ用
 
@@ -229,9 +275,9 @@ end
 banmen = Array.new(20){Array.new(10, 0)}
 18.times do |idy|  #行方向
   8.times do |idx|
-    r = rand(0..6)
-    if(r > 3)
-      banmen[idy+1][idx+1] = 0
+    r = rand(0..3)
+    if(r > 2)
+      banmen[idy+1][idx+1] = 1
     else
       banmen[idy+1][idx+1] = r
     end
@@ -242,5 +288,5 @@ banmen.each do |gyou|
   p gyou
 end
 print "\n\n"
-DropFlag(banmen)
+DeleteAndDrop(banmen)
 #=end
