@@ -4,6 +4,7 @@ include DXOpal
 
 Image.register(:medic, "image/REAL_YAKU.png")    #薬の画像
 require_remote 'main_menu_method.rb'
+require_remote 'randam.rb'
 
 Image.register(:back, "image/back.png")  #背景の画像
 Image.register(:enemy, "image/uirusu.png")  #ウイルスの画像
@@ -145,6 +146,7 @@ class Field
                     
                     @map[y][x] = @EMPTY
                 end
+                
                 x += 1
             end
             y += 1
@@ -203,68 +205,90 @@ Window.load_resources do    #画像変数などの定義はここでする
     queue[0].dir = 3;   queue[0].x = 4;
     queue[1].dir = 1;   queue[1].x = 5;
     mainmenu = MainMenu.new  #mainmenuを作成
+    type = 0  #処理タイプ 0:mainmenu 1:game 2:setting
     new_medic_flag = 0;
+    new_game_flag = 1;
+    virus_num = 10
     move = 0;
     
     #ここにゲーム全体のループ処理を記述
     Window.loop do
         
-        if (new_medic_flag == 1) then
+        if (type == 0) then
             
-            queue[0] = Medic.new
-            queue[1] = Medic.new
-            queue[0].dir = 3;   queue[0].x = 4;
-            queue[1].dir = 1;   queue[1].x = 5;
-            queue[0].mode = 1; queue[1].mode = 1;
-            new_medic_flag = 0
-        end
+            new_game_flag = 1
+            type = mainmenu.draw()
             
-        field.draw()
-        2.times do |i|
+        elsif (type == 1) then
             
-            if (queue[i].mode == 1) then    #移動中なら
-            
-                queue[i].draw()
-                queue[i].move(field.map, move, i)
+            if (new_game_flag == 1) then
                 
-                #止まったら
-                if (queue[i].mode == 2) then
+                NewMap(field.map, virus_num)
+                new_game_flag = 0
+            end
+        
+        
+            if (new_medic_flag == 1) then
+            
+                queue[0] = Medic.new
+                queue[1] = Medic.new
+                queue[0].dir = 3;   queue[0].x = 4;
+                queue[1].dir = 1;   queue[1].x = 5;
+                queue[0].mode = 1; queue[1].mode = 1;
+                new_medic_flag = 0
+            end
+            
+            field.draw()
+            2.times do |i|
+            
+                if (queue[i].mode == 1) then    #移動中なら
+            
+                    queue[i].draw()
+                    queue[i].move(field.map, move, i)
+                
+                    #止まったら
+                    if (queue[i].mode == 2) then
                     
-                    if (i == 0) then
-                        queue[1].mode = 2
-                        field.map[queue[0].y][queue[0].x] = queue[0].color + 1
-                        field.map[queue[0].y][queue[0].x + 1] = queue[1].color + 1
-                        field.dir_map[queue[0].y][queue[0].x] = queue[0].dir + 1
-                        field.dir_map[queue[0].y][queue[0].x + 1] = queue[1].dir + 1
-                    else
-                        queue[0].mode = 2
-                        field.map[queue[1].y][queue[1].x] = queue[1].color + 1
-                        field.map[queue[1].y][queue[1].x - 1] = queue[0].color + 1
-                        field.dir_map[queue[1].y][queue[1].x] = queue[1].dir + 1
-                        field.dir_map[queue[1].y][queue[1].x - 1] = queue[0].dir + 1
+                        if (i == 0) then
+                            queue[1].mode = 2
+                            field.map[queue[0].y][queue[0].x] = queue[0].color + 1
+                            field.map[queue[0].y][queue[0].x + 1] = queue[1].color + 1
+                            field.dir_map[queue[0].y][queue[0].x] = queue[0].dir + 1
+                            field.dir_map[queue[0].y][queue[0].x + 1] = queue[1].dir + 1
+                        else
+                            queue[0].mode = 2
+                            field.map[queue[1].y][queue[1].x] = queue[1].color + 1
+                            field.map[queue[1].y][queue[1].x - 1] = queue[0].color + 1
+                            field.dir_map[queue[1].y][queue[1].x] = queue[1].dir + 1
+                            field.dir_map[queue[1].y][queue[1].x - 1] = queue[0].dir + 1
+                        end
+                        new_medic_flag = 1  #新しく薬を生成
                     end
-                    new_medic_flag = 1  #新しく薬を生成
                 end
             end
-        end
-        #if (move != 0 && move < 190) then
-        #    move += 200
-        #end
+            #if (move != 0 && move < 190) then
+            #    move += 200
+            #end
         
-        move = 0
-        if (Input.x < 0) then   #左
-            
-            move = -1
-        elsif (Input.x > 0) #右
-            
-            move = 1
-        elsif (Input.y > 0) #した
-            
-            move = 2
-        else
-            
             move = 0
+            if (Input.x < 0) then   #左
+            
+                move = -1
+            elsif (Input.x > 0) #右
+            
+                move = 1
+            elsif (Input.y > 0) #した
+            
+                move = 2
+            else
+            
+                move = 0
+            end
+            sleep(0.1)
+            
+        elsif (type == 2) then
+            type = 0
+            
         end
-        sleep(0.1)
     end
 end
