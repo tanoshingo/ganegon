@@ -179,6 +179,16 @@ class Field
                 if (@map[y][x] == @WALL) then   #壁を描画
                     Window.draw(x * @mapchip_size + @default_x, y * @mapchip_size + @default_y, @bottle_chip)
                     
+                elsif (@map[y][x] > @EMPTY && @map[y][x] >= 10)
+                    if (@map[y][x] == 10) then
+                        Window.draw_ex(x * @mapchip_size + @default_x + 5, y * @mapchip_size + @default_y + 1, @virus[@map[y][x] - 10], {scale_x: 2.0, scale_y: 2.0})
+                    elsif (@map[y][x] == 11)
+                        Window.draw_ex(x * @mapchip_size + @default_x + 5, y * @mapchip_size + @default_y + 1, @virus[@map[y][x] - 10], {scale_x: 2.0, scale_y: 2.0})
+                    elsif (@map[y][x] == 12)
+                        Window.draw_ex(x * @mapchip_size + @default_x + 5, y * @mapchip_size + @default_y + 1, @virus[@map[y][x] - 10], {scale_x: 2.0, scale_y: 2.0})
+                    end
+                            
+                    
                 elsif (@map[y][x] > @EMPTY && @map[y][x] < 8) then #薬の描画
                     if (dir_map[y][x] - 1 == 1) then
                         Window.draw_ex(x * @mapchip_size + @default_x + 5, y * @mapchip_size + @default_y + 1, @medics[@map[y][x] - 1], {scale_x: 2.0, scale_y: 2.0})

@@ -17,7 +17,7 @@ def NewMap(banmen, virus_num)
       x = rand(1..8) #ウイルスのx座標
       y = rand(6..18) #ウイルスのy座標
       if(banmen[y][x] == 0) #空いていたらウイルスの色を決めて代入
-        banmen[y][x] = rand(0..2)
+        banmen[y][x] = rand(10..12)
         break
       end
       #空いていないなら続行
