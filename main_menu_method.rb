@@ -17,13 +17,15 @@ def draw()
       
     #main_menu処理↓
     #選択
-    if (Input.key_push?(K_W)) then
+    if (Input.y < 0) then
         @choices = @choices + 1
             
-    elsif (Input.key_push?(K_S)) then
+    elsif (Input.y > 0) then
         @choices = @choices - 1
             
     end
+    
+    sleep(0.1)
       
     #決定
     if ((@choices % 2) == 0) then

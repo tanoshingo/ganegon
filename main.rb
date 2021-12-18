@@ -1,127 +1,10 @@
-<<<<<<< HEAD
-# coding: utf-8
-require 'dxopal';
-include DXOpal
-
-require_remote 'main_menu_method.rb'
-
-
-Image.register(:back, "image/back.png")  #背景の画像
-Image.register(:medic, "image/YAKU_cupcell.png")    #薬の画像
-Image.register(:enemy, "image/uirusu.png")  #ウイルスの画像
-Image.register(:heart, "image/heart.png")  #ハートの画像
-
-
-#ウィンドウの初期設定
-Window.width = 1200
-Window.height = 800
-Window.bgcolor = C_WHITE
-
-#クラス定義・メソッド定義-------------------------------------------------------------------------
-
-#概　要：field用のクラス
-class Field
-    
-    #attr_accessor :map :medics :virus :bottle_chip
-
-    def initialize()
-        
-        @FIELD_Y = 20   #マップのYの大きさ
-        @FIELD_X = 10   #マップのXの大きさ
-        
-        @EMPTY = 0
-        @WALL = 1000000
-        
-        #フィールド全体の変数を宣言
-        @map = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
-        
-        #画像データを格納する変数
-        @medics = Image[:medic].slice_tiles(6, 1)    #薬の画像を分割（配列化、medics[0]～medics[5]）
-        @virus = Image[:enemy].slice_tiles(2, 2) #ウイルスの画像を分割（配列化、virus[0]～virus[2]）
-        @bottle_chip = Image.new(30, 30, [125, 125, 125]) #薬瓶のbit画像を生成
-
-        #壁を生成
-        (@FIELD_Y).times do |y|
-            
-            (@FIELD_X).times do |x|
-                
-                @map[y][x] = 0
-                
-                if (x == 0 || x == @FIELD_X - 1 || y == 0 || y == @FIELD_Y - 1) then    #壁を設置
-                    
-                    @map[y][x] = @WALL
-                else
-                    
-                    @map[y][x] = @EMPTY
-                end
-                x += 1
-            end
-            y += 1
-        end
-        #薬が降ってくる場所には穴をあける
-        @map[0][4] = @EMPTY
-        @map[0][5] = @EMPTY
-    end
-    
-    #概　要：マップの描画
-    #引　数：なし
-    #戻り値：なし
-    def draw()
-        
-        @default_x = 450    #X方向の開始座標
-        @default_y = 150    #Y方向の開始座標
-        @mapchip_size = 30  #1マスあたりのサイズ
-        
-        y = 0
-        while y < @FIELD_Y do
-            
-            x = 0
-            while x < @FIELD_X do
-                
-                if (@map[y][x] == @WALL) then   #壁を描画
-                    Window.draw(x * @mapchip_size + @default_x, y * @mapchip_size + @default_y, @bottle_chip)
-                end
-                x += 1
-            end
-            y += 1
-        end
-    end
-end
-
-#メイン部分--------------------------------------------------------------------------------------
-Window.load_resources do    #画像変数などの定義はここでする
-
-    #background = Image[:back]  #背景描画
-    
-    field = Field.new   #mapを作成する
-    mainmenu = MainMenu.new  #mainmenuを作成
-    
-    type = 0  #処理タイプ 0:mainmenu 1:game 2:setting
-    
-    #ここにゲーム全体のループ処理を記述
-    Window.loop do
-        
-        #Window.draw(0, 0, background, -10)  #背景描画
-        
-        if (type == 0) then
-            type = mainmenu.draw()
-        
-        elsif (type == 1) then
-            field.draw()
-        
-        elsif (type == 2) then
-            type = 0
-            
-        end
-        
-    end
-=======
 # coding: utf-8
 require 'dxopal';
 include DXOpal
 
 Image.register(:medic, "image/REAL_YAKU.png")    #薬の画像
 require_remote 'main_menu_method.rb'
+require_remote 'randam.rb'
 
 Image.register(:back, "image/back.png")  #背景の画像
 Image.register(:enemy, "image/uirusu.png")  #ウイルスの画像
@@ -263,6 +146,7 @@ class Field
                     
                     @map[y][x] = @EMPTY
                 end
+                
                 x += 1
             end
             y += 1
@@ -321,69 +205,90 @@ Window.load_resources do    #画像変数などの定義はここでする
     queue[0].dir = 3;   queue[0].x = 4;
     queue[1].dir = 1;   queue[1].x = 5;
     mainmenu = MainMenu.new  #mainmenuを作成
+    type = 0  #処理タイプ 0:mainmenu 1:game 2:setting
     new_medic_flag = 0;
+    new_game_flag = 1;
+    virus_num = 10
     move = 0;
     
     #ここにゲーム全体のループ処理を記述
     Window.loop do
         
-        if (new_medic_flag == 1) then
+        if (type == 0) then
             
-            queue[0] = Medic.new
-            queue[1] = Medic.new
-            queue[0].dir = 3;   queue[0].x = 4;
-            queue[1].dir = 1;   queue[1].x = 5;
-            queue[0].mode = 1; queue[1].mode = 1;
-            new_medic_flag = 0
-        end
+            new_game_flag = 1
+            type = mainmenu.draw()
             
-        field.draw()
-        2.times do |i|
+        elsif (type == 1) then
             
-            if (queue[i].mode == 1) then    #移動中なら
-            
-                queue[i].draw()
-                queue[i].move(field.map, move, i)
+            if (new_game_flag == 1) then
                 
-                #止まったら
-                if (queue[i].mode == 2) then
+                NewMap(field.map, virus_num)
+                new_game_flag = 0
+            end
+        
+        
+            if (new_medic_flag == 1) then
+            
+                queue[0] = Medic.new
+                queue[1] = Medic.new
+                queue[0].dir = 3;   queue[0].x = 4;
+                queue[1].dir = 1;   queue[1].x = 5;
+                queue[0].mode = 1; queue[1].mode = 1;
+                new_medic_flag = 0
+            end
+            
+            field.draw()
+            2.times do |i|
+            
+                if (queue[i].mode == 1) then    #移動中なら
+            
+                    queue[i].draw()
+                    queue[i].move(field.map, move, i)
+                
+                    #止まったら
+                    if (queue[i].mode == 2) then
                     
-                    if (i == 0) then
-                        queue[1].mode = 2
-                        field.map[queue[0].y][queue[0].x] = queue[0].color + 1
-                        field.map[queue[0].y][queue[0].x + 1] = queue[1].color + 1
-                        field.dir_map[queue[0].y][queue[0].x] = queue[0].dir + 1
-                        field.dir_map[queue[0].y][queue[0].x + 1] = queue[1].dir + 1
-                    else
-                        queue[0].mode = 2
-                        field.map[queue[1].y][queue[1].x] = queue[1].color + 1
-                        field.map[queue[1].y][queue[1].x - 1] = queue[0].color + 1
-                        field.dir_map[queue[1].y][queue[1].x] = queue[1].dir + 1
-                        field.dir_map[queue[1].y][queue[1].x - 1] = queue[0].dir + 1
+                        if (i == 0) then
+                            queue[1].mode = 2
+                            field.map[queue[0].y][queue[0].x] = queue[0].color + 1
+                            field.map[queue[0].y][queue[0].x + 1] = queue[1].color + 1
+                            field.dir_map[queue[0].y][queue[0].x] = queue[0].dir + 1
+                            field.dir_map[queue[0].y][queue[0].x + 1] = queue[1].dir + 1
+                        else
+                            queue[0].mode = 2
+                            field.map[queue[1].y][queue[1].x] = queue[1].color + 1
+                            field.map[queue[1].y][queue[1].x - 1] = queue[0].color + 1
+                            field.dir_map[queue[1].y][queue[1].x] = queue[1].dir + 1
+                            field.dir_map[queue[1].y][queue[1].x - 1] = queue[0].dir + 1
+                        end
+                        new_medic_flag = 1  #新しく薬を生成
                     end
-                    new_medic_flag = 1  #新しく薬を生成
                 end
             end
-        end
-        #if (move != 0 && move < 190) then
-        #    move += 200
-        #end
+            #if (move != 0 && move < 190) then
+            #    move += 200
+            #end
         
-        move = 0
-        if (Input.x < 0) then   #左
-            
-            move = -1
-        elsif (Input.x > 0) #右
-            
-            move = 1
-        elsif (Input.y > 0) #した
-            
-            move = 2
-        else
-            
             move = 0
+            if (Input.x < 0) then   #左
+            
+                move = -1
+            elsif (Input.x > 0) #右
+            
+                move = 1
+            elsif (Input.y > 0) #した
+            
+                move = 2
+            else
+            
+                move = 0
+            end
+            sleep(0.1)
+            
+        elsif (type == 2) then
+            type = 0
+            
         end
-        sleep(0.1)
     end
->>>>>>> upstream/main
 end
