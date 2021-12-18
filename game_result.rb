@@ -112,7 +112,7 @@ end
 #消す判定-----------------------------------------------------
 #引数　banmen: カプセルやウイルスの盤面
 #戻り値　banmen_t: 消す判定の配列
-def Delete(banmen)
+def DeleteFlag(banmen)
   banmen_t = Array.new(20){Array.new(10, 0)}  #消す判定の配列生成
   
   #行方向
@@ -148,6 +148,59 @@ def Delete(banmen)
 end
 #消す判定ここまで----------------------------------------------
 
+def DropFlagLoop(banmen, banmen_t, banmen_d, x, y, flag)
+  a = Array.new(3, 0)
+  
+  if(banmen[y][x] == 0)
+      return banmen_t[y][x] = 0
+  elsif( banmen_t[y][x] != -1)
+      #p "e(x,y): (#{x}, #{y})"
+      return banmen_t[y][x]
+  end
+  
+  if(x+1 <= 8&& flag != 2)
+    #p "right"
+    a[0] = DropFlagLoop(banmen, banmen_t, banmen_d, x+1, y, 1)
+  end
+  if(y+1 <= 18 )
+     # p "down"
+    a[1] = DropFlagLoop(banmen, banmen_t, banmen_d, x  , y+1, 0)
+  end
+  if(x-1 >= 1 && flag != 1)
+     # p "left"
+    a[2] = DropFlagLoop(banmen, banmen_t, banmen_d, x-1, y, 2)
+  end
+  
+  if((a[0]==1 || a[1]==1 || a[2]==1) || y == 18)
+      banmen_t[y][x] = 1
+      #p "1(x,y): (#{x}, #{y})"
+      return 1
+  else
+      #p "0(x,y): (#{x}, #{y})"
+      banmen_d[y][x] = 1
+      banmen_t[y][x] = 0
+      return 0
+  end
+    
+end
+
+
+def DropFlag(banmen)
+  banmen_d = Array.new(20){Array.new(10, 0)}
+  banmen_t = Array.new(20){Array.new(10, -1)}  #消す判定の配列生成
+  18.times do |idy|  #行方向
+    8.times do |idx|
+      DropFlagLoop(banmen, banmen_t, banmen_d, idx+1, idy+1, 0)
+    end
+  end
+  banmen_t.each do |gyou|
+    p gyou
+  end
+  banmen_d.each do |gyou|
+    p gyou
+  end
+end
+
 
 #以下, デバッグ用
 
@@ -167,7 +220,27 @@ banmen.each do |gyou|
   p gyou
 end
 print "\n\n"
-Delete(banmen).each do |gyou|
+DeleteFlag(banmen).each do |gyou|
   p gyou
 end
 =end
+
+#=begin
+banmen = Array.new(20){Array.new(10, 0)}
+18.times do |idy|  #行方向
+  8.times do |idx|
+    r = rand(0..6)
+    if(r > 3)
+      banmen[idy+1][idx+1] = 0
+    else
+      banmen[idy+1][idx+1] = r
+    end
+  end
+end
+
+banmen.each do |gyou|
+  p gyou
+end
+print "\n\n"
+DropFlag(banmen)
+#=end
