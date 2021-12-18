@@ -10,6 +10,7 @@ Image.register(:back, "image/back.png")  #背景の画像
 Image.register(:enemy, "image/uirusu.png")  #ウイルスの画像
 Image.register(:heart, "image/heart.png")  #ハートの画像
 Image.register(:light, "image/koutakumi.png")   #光沢の画像
+Image.register(:title, "image/title.png")  #タイトルの画像
 
 #ウィンドウの初期設定
 Window.width = 1200
@@ -399,7 +400,7 @@ Window.load_resources do    #画像変数などの定義はここでする
             end
             sleep(0.1)
         else
-            
+        
             type = 0
         end
     end
